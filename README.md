@@ -25,4 +25,4 @@ Note that it can only match against tracks that exist in GPMAA - if it doesn't e
 Oh I can't be bothered - can't I just use your playlist?
 --------------------------------------------------------
 
-Sure! Coming soon.
+Sure! [Check here!](http://james.belchamber.com/gpmaa-bbc-playlister.html)
