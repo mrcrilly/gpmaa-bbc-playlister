@@ -20,6 +20,8 @@ Currently tested with:
 - BBC Radio Scotland (radioscotland)
 - BBC Asian Network (asiannetwork)
 
+Note that it can only match against tracks that exist in GPMAA - if it doesn't exist, it won't be in the playlist.
+
 Oh I can't be bothered - can't I just use your playlist?
 --------------------------------------------------------
 
