@@ -51,14 +51,9 @@ def get_store_id(search_string):
   song_hits = details['song_hits']
   for song_hit in song_hits:
     song_hit_artist = strip_non_ascii(song_hit['track']['artist'].lower())
-    song_hit_title = strip_non_ascii(song_hit['track']['title'].lower())
-    print song_hit_artist
-    print song_hit_title
-    print search_string
     if song_hit_artist in search_string:
-      if song_hit_title in search_string:
-        storeId = song_hit['track']['storeId']
-        return storeId
+      storeId = song_hit['track']['storeId']
+      return storeId
 
 def strip_non_ascii(string):
   stripped = (c for c in string if 0 < ord(c) < 127)
