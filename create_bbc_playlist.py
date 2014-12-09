@@ -3,6 +3,7 @@ from gmusicapi import Mobileclient
 import requests
 import re
 import codecs
+from BeautifulSoup import BeautifulSoup
 
 api = Mobileclient()
 username = sys.argv[1]
@@ -31,12 +32,18 @@ def google_login():
 def get_playlist():
   bbc_playlist = 'http://www.bbc.co.uk/' + bbc_station + '/playlist'
   r = requests.get(bbc_playlist)
-  artists = re.findall(r'<div[^>]*class\s*=\s*([\"\'])pll-playlist-item-artist\1[^>]*>(.*?)</div>', r.text)
-  songs = re.findall(r'<div[^>]*class\s*=\s*([\"\'])pll-playlist-item-title\1[^>]*>(.*?)</div>', r.text)
+  soup = BeautifulSoup(''.join(r))
+  songs = []
+  for item in soup.findAll('div', { "class" : "pll-playlist-item-artist"}):
+    if len(item.contents) == 3:
+      songs.append(item.contents[1].string.strip())
+    else:
+      songs.append(item.string.strip())
+  artists = []
+  for item in soup.findAll('div', { "class" : "pll-playlist-item-title"}):
+    artists.append(item.string)
   playlist_name = re.findall(r'<title>(.*?)</title>', r.text)
-  artists = [tup[1] for tup in artists]
   artists = [string.encode('utf8', 'replace') for string in artists]
-  songs = [tup[1] for tup in songs]
   songs = [string.encode('utf8', 'replace') for string in songs]
   playlist_name = playlist_name[0].encode('utf8', 'replace')
   count = 0
