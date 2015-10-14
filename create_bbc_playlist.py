@@ -24,7 +24,7 @@ def verify_args():
   return "pass"
 
 def google_login():
-  logged_in = api.login(username, password)
+  logged_in = api.login(username, password, Mobileclient.FROM_MAC_ADDRESS)
   if logged_in == 0:
     print "Login failed. Are you a Google Play Music All Access subscriber?"
   return logged_in
