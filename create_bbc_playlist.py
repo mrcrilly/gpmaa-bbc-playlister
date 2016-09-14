@@ -4,11 +4,16 @@ import requests
 import re
 import codecs
 from BeautifulSoup import BeautifulSoup
+import boto3
+import base64
 
 api = Mobileclient()
-username = sys.argv[1]
-password = sys.argv[2]
-bbc_station = sys.argv[3]
+
+def decrypt_token(token):
+    client = boto3.client('kms')
+    token = base64.decodestring(token)
+    response = client.decrypt(CiphertextBlob=token)
+    return response['Plaintext']
 
 def verify_args():
   if not re.match(r"[^@]+@[^@]+\.[^@]+", username):
@@ -85,7 +90,7 @@ def get_playlist_id(playlist):
     playlist_id = api.create_playlist(playlist)
     return playlist_id
 
-if verify_args() == "pass":
+def main():
   if google_login() == 1:
     tracks_playlistname = get_playlist()
     tracks = tracks_playlistname[0]
@@ -99,3 +104,23 @@ if verify_args() == "pass":
         print "Track added: " + track
       except Exception, exc:
         print "Cannot find " + track
+
+def handler(event, context):
+  global username
+  global password
+  global bbc_station
+  username = event['username']
+  password = decrypt_token(event['password'])
+  bbc_station = event['bbc_station']
+  if verify_args() == "pass":
+    main()
+
+if __name__ == '__main__':
+  global username
+  global password
+  global bbc_station
+  username = sys.argv[1]
+  password = sys.argv[2]
+  bbc_station = sys.argv[3]
+  if verify_args() == "pass":
+    main()
